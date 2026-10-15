@@ -212,13 +212,12 @@ export function ReviewForm({ onPosted }: ReviewFormProps) {
         <div>
           <p className="font-klee text-base font-semibold text-acorn-800">写真（任意）</p>
           <p className="mt-1 font-sans text-xs sm:text-sm leading-relaxed text-acorn-700/80">
-            スマートフォンからはカメラが起動します。送信前に端末内で位置情報（GPS等のEXIF情報）を100%自動消去して安全に送信されます。
+            カメラでの撮影、または写真アルバムから選択できます。送信前に端末内で位置情報（GPS等のEXIF情報）を100%自動消去して安全に送信されます。
           </p>
           <input
             ref={fileInputRef}
             type="file"
             accept="image/*"
-            capture="environment"
             className="sr-only"
             onChange={onPickPhoto}
             aria-label="作品の写真を撮る、または選ぶ"
