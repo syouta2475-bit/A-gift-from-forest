@@ -9,6 +9,10 @@ type NextEventCardProps = {
   event: MarcheEvent | null;
   /** プレビュー表示フラグ（アニメーションやカレンダー誘導ボタンを省略） */
   preview?: boolean;
+  /** 予定なし時の黒板タイトル（管理画面の設定から取得） */
+  emptyTitle?: string;
+  /** 予定なし時の黒板メッセージ（管理画面の設定から取得） */
+  emptyMessage?: string;
 };
 
 /**
@@ -16,7 +20,12 @@ type NextEventCardProps = {
  * カレンダーの予定データと完全自動連動。
  * 予定が0件または日付未入力のときは黒板デザインを維持したまま温かい未定UIを表示。
  */
-export function NextEventCard({ event, preview = false }: NextEventCardProps) {
+export function NextEventCard({
+  event,
+  preview = false,
+  emptyTitle,
+  emptyMessage,
+}: NextEventCardProps) {
   // 日付の安全な抽出（startDate と旧 date の両方に対応、空文字・undefined ガード）
   const rawStart = (event?.startDate || (event as unknown as { date?: string })?.date || "").trim();
   const rawEnd = (event?.endDate || rawStart || "").trim();
@@ -237,25 +246,35 @@ export function NextEventCard({ event, preview = false }: NextEventCardProps) {
                 /* 予定が0件のときの未定UI（チョーク手書きエリア） */
                 <>
                   <h3 className="text-lg sm:text-xl font-bold text-[#F3D79B] pb-2 border-b-2 border-dashed border-[#F3D79B]/40 leading-snug tracking-wide">
-                    森の工房より
+                    {emptyTitle || "森の工房より"}
                   </h3>
                   <p className="mt-4 text-sm sm:text-base leading-loose text-[#FAF7F2]/95 whitespace-pre-wrap break-words">
-                    つぎの季節のマルシェに向けて、木の実を拾いながら少しずつ作品を準備しています。日程が決まり次第、この黒板でお知らせしますね。
+                    {emptyMessage ||
+                      "つぎの季節のマルシェに向けて、木の実を拾いながら少しずつ作品を準備しています。日程が決まり次第、この黒板でお知らせしますね。"}
                   </p>
-                  <ul className="mt-3 space-y-1.5 text-sm sm:text-base leading-relaxed text-[#FAF7F2]/95">
-                    <li className="flex items-start gap-2">
-                      <span style={{ color: chalkColors[0] }} className="font-bold shrink-0 text-base">
-                        ✽
-                      </span>
-                      <span>新作の木の実チャームを製作中</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span style={{ color: chalkColors[1] }} className="font-bold shrink-0 text-base">
-                        ✽
-                      </span>
-                      <span>松ぼっくりのリースも心を込めて準備しています</span>
-                    </li>
-                  </ul>
+                  {(!emptyMessage ||
+                    emptyMessage.includes("つぎの季節のマルシェに向けて")) && (
+                    <ul className="mt-3 space-y-1.5 text-sm sm:text-base leading-relaxed text-[#FAF7F2]/95">
+                      <li className="flex items-start gap-2">
+                        <span
+                          style={{ color: chalkColors[0] }}
+                          className="font-bold shrink-0 text-base"
+                        >
+                          ✽
+                        </span>
+                        <span>新作の木の実チャームを製作中</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span
+                          style={{ color: chalkColors[1] }}
+                          className="font-bold shrink-0 text-base"
+                        >
+                          ✽
+                        </span>
+                        <span>松ぼっくりのリースも心を込めて準備しています</span>
+                      </li>
+                    </ul>
+                  )}
                 </>
               )}
             </div>

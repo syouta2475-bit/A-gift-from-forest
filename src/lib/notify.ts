@@ -1,6 +1,4 @@
-/**
- * 口コミ投稿通知ヘルパー（LINE Messaging API & メール通知）
- */
+import { loadSettings } from "@/lib/store";
 
 type ReviewNotificationPayload = {
   nickname: string;
@@ -24,10 +22,23 @@ function getSiteUrl(): string {
 
 /** LINE Messaging API へのプッシュ通知 */
 async function notifyLine(payload: ReviewNotificationPayload): Promise<boolean> {
-  const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-  const toUserId = process.env.LINE_ADMIN_USER_ID;
+  // 1. site_settings の line_notify_enabled 設定を確認
+  try {
+    const settings = await loadSettings();
+    if (!settings.lineNotifyEnabled) {
+      console.log("[Notify] LINE通知は管理画面設定（line_notify_enabled: false）によりスキップされました。");
+      return false;
+    }
+  } catch (err) {
+    console.warn("[Notify] 設定読み込み失敗（通知処理を継続）:", err);
+  }
+
+  // 2. 環境変数の前後の空白や改行を安全にトリム
+  const token = (process.env.LINE_CHANNEL_ACCESS_TOKEN || "").trim();
+  const toUserId = (process.env.LINE_ADMIN_USER_ID || "").trim();
 
   if (!token || !toUserId) {
+    console.log("[Notify] LINE環境変数が未設定または空文字のためスキップされました。");
     return false;
   }
 
@@ -59,9 +70,17 @@ async function notifyLine(payload: ReviewNotificationPayload): Promise<boolean> 
         messages: [{ type: "text", text: messageText }],
       }),
     });
-    return res.ok;
+
+    if (!res.ok) {
+      const errorText = await res.text().catch(() => "");
+      console.error(`[Notify] LINE push error: status=${res.status} ${res.statusText}, body=${errorText}`);
+      return false;
+    }
+
+    console.log("[Notify] LINE push notification sent successfully.");
+    return true;
   } catch (err) {
-    console.error("[Notify] LINE push error:", err);
+    console.error("[Notify] LINE push fetch exception:", err);
     return false;
   }
 }

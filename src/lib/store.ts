@@ -1,13 +1,14 @@
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import type { MarcheEvent, GalleryWork, Review } from "@/types";
+import type { MarcheEvent, GalleryWork, Review, SiteSettings, EmptyBoardPreset } from "@/types";
 import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const EVENTS_FILE = path.join(DATA_DIR, "events.json");
 const GALLERY_FILE = path.join(DATA_DIR, "gallery.json");
 const REVIEWS_FILE = path.join(DATA_DIR, "reviews.json");
+const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -453,4 +454,104 @@ export async function deleteReviewFromSupabase(id: string): Promise<void> {
       }
     }
   }
+}
+
+/* ============================================================
+   SiteSettings 操作（Supabase ＆ ローカル JSON ハイブリッド）
+   ============================================================ */
+
+export const DEFAULT_SETTINGS: SiteSettings = {
+  id: "default",
+  lineNotifyEnabled: true,
+  emptyBoardTitle: "森の工房より",
+  emptyBoardMessage:
+    "つぎの季節のマルシェに向けて、木の実を拾いながら少しずつ作品を準備しています。日程が決まり次第、この黒板でお知らせしますね。",
+  emptyBoardHistory: [
+    {
+      id: "preset-1",
+      title: "森の工房より（準備中）",
+      message:
+        "つぎの季節のマルシェに向けて、木の実を拾いながら少しずつ作品を準備しています。日程が決まり次第、この黒板でお知らせしますね。",
+      createdAt: "2026-10-01T00:00:00.000Z",
+    },
+    {
+      id: "preset-2",
+      title: "出店のお礼",
+      message:
+        "先日のマルシェでは、たくさんの方に作品を手にとっていただき心より感謝申し上げます。また次回お会いできる日を楽しみにしています。",
+      createdAt: "2026-10-10T00:00:00.000Z",
+    },
+  ],
+  updatedAt: new Date().toISOString(),
+};
+
+export async function loadSettings(): Promise<SiteSettings> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from("site_settings")
+          .select("*")
+          .eq("id", "default")
+          .maybeSingle();
+
+        if (error) {
+          console.error("[Supabase loadSettings error]", error);
+        } else if (data) {
+          let history: EmptyBoardPreset[] = [];
+          if (Array.isArray(data.empty_board_history)) {
+            history = data.empty_board_history;
+          } else if (typeof data.empty_board_history === "string") {
+            try {
+              history = JSON.parse(data.empty_board_history);
+            } catch {}
+          }
+
+          return {
+            id: "default",
+            lineNotifyEnabled: typeof data.line_notify_enabled === "boolean" ? data.line_notify_enabled : true,
+            emptyBoardTitle: data.empty_board_title || DEFAULT_SETTINGS.emptyBoardTitle,
+            emptyBoardMessage: data.empty_board_message || DEFAULT_SETTINGS.emptyBoardMessage,
+            emptyBoardHistory: history.length > 0 ? history : DEFAULT_SETTINGS.emptyBoardHistory,
+            updatedAt: data.updated_at || new Date().toISOString(),
+          };
+        } else {
+          // まだ行が存在しない場合はデフォルト値を保存
+          await saveSettings(DEFAULT_SETTINGS);
+          return DEFAULT_SETTINGS;
+        }
+      } catch (err) {
+        console.error("[Supabase loadSettings exception]", err);
+      }
+    }
+    return DEFAULT_SETTINGS;
+  }
+
+  return readLocalJsonSafely(SETTINGS_FILE, DEFAULT_SETTINGS);
+}
+
+export async function saveSettings(settings: SiteSettings): Promise<void> {
+  const payload = {
+    id: "default",
+    line_notify_enabled: Boolean(settings.lineNotifyEnabled),
+    empty_board_title: String(settings.emptyBoardTitle || "").trim() || DEFAULT_SETTINGS.emptyBoardTitle,
+    empty_board_message: String(settings.emptyBoardMessage || "").trim() || DEFAULT_SETTINGS.emptyBoardMessage,
+    empty_board_history: Array.isArray(settings.emptyBoardHistory) ? settings.emptyBoardHistory : [],
+    updated_at: new Date().toISOString(),
+  };
+
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      const { error } = await supabase.from("site_settings").upsert(payload);
+      if (error) {
+        console.error("[Supabase saveSettings error]", error);
+        throw new Error(`Supabase saveSettings failed: ${error.message}`);
+      }
+    }
+    return;
+  }
+
+  await writeLocalJsonSafely(SETTINGS_FILE, { ...settings, ...payload });
 }

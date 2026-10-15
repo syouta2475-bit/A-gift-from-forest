@@ -7,6 +7,7 @@ import type { MarcheEvent, GalleryWork } from "@/types";
 import { EventTab } from "@/components/admin/EventTab";
 import { GalleryTab } from "@/components/admin/GalleryTab";
 import { ReviewTab } from "@/components/admin/ReviewTab";
+import { SettingsTab } from "@/components/admin/SettingsTab";
 import {
   PineconeIllust,
   AcornIllust,
@@ -14,7 +15,7 @@ import {
   MarcheBoothIllust,
 } from "@/components/ui/Icons";
 
-type TabType = "events" | "gallery" | "reviews";
+type TabType = "events" | "gallery" | "reviews" | "settings";
 
 function AdminDashboardContent() {
   const router = useRouter();
@@ -66,7 +67,13 @@ function AdminDashboardContent() {
   }, [refreshAll]);
 
   useEffect(() => {
-    if (tabParam && (tabParam === "events" || tabParam === "gallery" || tabParam === "reviews")) {
+    if (
+      tabParam &&
+      (tabParam === "events" ||
+        tabParam === "gallery" ||
+        tabParam === "reviews" ||
+        tabParam === "settings")
+    ) {
       setActiveTab(tabParam);
     }
   }, [tabParam]);
@@ -172,6 +179,19 @@ function AdminDashboardContent() {
               <CommunicationIllust className="w-6 h-auto shrink-0" />
               <span>お客様の声</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => handleTabChange("settings")}
+              className={`flex items-center gap-2 py-3 px-3 sm:px-5 font-klee text-sm sm:text-base font-bold border-b-2 transition-all ${
+                activeTab === "settings"
+                  ? "border-[#D97706] text-[#D97706] bg-[#FEF3C7]/40 rounded-t-xl"
+                  : "border-transparent text-[#7D6B5D] hover:text-[#4A3B32] hover:border-[#D8C7B5]"
+              }`}
+            >
+              <span className="text-base">⚙️</span>
+              <span>サイト設定</span>
+            </button>
           </nav>
         </div>
       </header>
@@ -187,6 +207,7 @@ function AdminDashboardContent() {
             {activeTab === "events" && <EventTab events={events} onRefresh={fetchEvents} />}
             {activeTab === "gallery" && <GalleryTab works={works} onRefresh={fetchWorks} />}
             {activeTab === "reviews" && <ReviewTab />}
+            {activeTab === "settings" && <SettingsTab />}
           </>
         )}
       </main>

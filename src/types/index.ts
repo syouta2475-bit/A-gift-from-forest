@@ -72,3 +72,22 @@ export type Review = {
   ownerReply?: string;
   createdAt: string;
 };
+
+/** 黒板メッセージ履歴プリセット */
+export type EmptyBoardPreset = {
+  id: string;
+  title: string;
+  message: string;
+  createdAt: string;
+  savedAt?: string;
+};
+
+/** サイト設定（LINE通知、予定なし黒板メッセージ等） */
+export type SiteSettings = {
+  id: string;
+  lineNotifyEnabled: boolean;
+  emptyBoardTitle: string;
+  emptyBoardMessage: string;
+  emptyBoardHistory: EmptyBoardPreset[];
+  updatedAt: string;
+};

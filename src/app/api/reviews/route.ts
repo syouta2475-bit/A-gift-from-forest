@@ -218,13 +218,17 @@ export async function POST(request: Request) {
     revalidatePath("/");
     revalidatePath("/admin");
 
-    // 6. 管理者へのLINE・メール非同期通知（レスポンスをブロックしない）
-    notifyNewReview({
-      nickname: newReview.nickname,
-      comment: commentResult.value,
-      hasPhoto: Boolean(userImage),
-      createdAt: newReview.createdAt,
-    }).catch((err) => console.error("[Review notification failed]", err));
+    // 6. 管理者へのLINE・メール通知（Vercelサーバーレスで強制終了されないよう await で完了を待つ）
+    try {
+      await notifyNewReview({
+        nickname: newReview.nickname,
+        comment: commentResult.value,
+        hasPhoto: Boolean(userImage),
+        createdAt: newReview.createdAt,
+      });
+    } catch (err) {
+      console.error("[Review notification failed]", err);
+    }
 
     return NextResponse.json({ success: true, review: newReview }, { status: 201 });
   } catch (err) {

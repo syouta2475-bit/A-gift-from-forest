@@ -1,4 +1,5 @@
 import { getEvents, pickNextEvent } from "@/lib/events";
+import { loadSettings } from "@/lib/store";
 import { NextEventCard } from "./NextEventCard";
 import { Reveal } from "@/components/ui/Reveal";
 import { OwlIllust, ChalkWavyLine } from "@/components/ui/Icons";
@@ -6,10 +7,13 @@ import { OwlIllust, ChalkWavyLine } from "@/components/ui/Icons";
 /**
  * Next Event セクション（サーバーコンポーネント）。
  * データ取得と一番近い出店情報の選出を行い、NextEventCard に渡す。
- * 予定がない場合も黒板デザインを維持して未定UIを表示。
+ * 予定がない場合も黒板デザインを維持して未定UIを表示（文言は管理画面の設定と連動）。
  */
 export async function NextEvent() {
-  const events = await getEvents();
+  const [events, settings] = await Promise.all([
+    getEvents(),
+    loadSettings(),
+  ]);
   const next = pickNextEvent(events, new Date());
 
   return (
@@ -39,7 +43,11 @@ export async function NextEvent() {
         </Reveal>
 
         <div>
-          <NextEventCard event={next} />
+          <NextEventCard
+            event={next}
+            emptyTitle={settings.emptyBoardTitle}
+            emptyMessage={settings.emptyBoardMessage}
+          />
         </div>
       </div>
     </section>
