@@ -178,17 +178,23 @@ export async function POST(request: Request) {
           width: 800,
           height: 800,
         };
-      } else {
-        // 2. 未設定または失敗時はローカルへフォールバック
-        await fs.mkdir(REVIEW_UPLOAD_DIR, { recursive: true });
-        const filePath = path.join(REVIEW_UPLOAD_DIR, filename);
-        await fs.writeFile(filePath, buffer);
+      } else if (!process.env.VERCEL && !Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL)) {
+        // ローカル開発環境のみローカルへ保存
+        try {
+          await fs.mkdir(REVIEW_UPLOAD_DIR, { recursive: true });
+          const filePath = path.join(REVIEW_UPLOAD_DIR, filename);
+          await fs.writeFile(filePath, buffer);
 
-        userImage = {
-          url: `/uploads/reviews/${filename}`,
-          width: 800,
-          height: 800,
-        };
+          userImage = {
+            url: `/uploads/reviews/${filename}`,
+            width: 800,
+            height: 800,
+          };
+        } catch (e) {
+          console.warn("[Local photo save skipped]", e);
+        }
+      } else {
+        console.warn("[Photo upload] Supabase Storage upload failed or skipped in production.");
       }
     }
 

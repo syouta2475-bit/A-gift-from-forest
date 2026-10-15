@@ -45,7 +45,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, url: supabaseUrl });
     }
 
-    // 2. 未設定または失敗時はローカルストレージへフォールバック
+    // Vercel本番環境またはSupabase設定時はローカルファイルシステムへの書き込みを行わない（EROFS防止）
+    if (process.env.VERCEL || Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL)) {
+      console.error("[Upload error] Supabase Storage upload failed in production.");
+      return NextResponse.json(
+        { error: "画像の保存に失敗しました。Supabase Storageのアクセス設定を確認してください。" },
+        { status: 500 }
+      );
+    }
+
+    // 2. ローカル開発環境のみローカルストレージへ保存
     await fs.mkdir(UPLOAD_DIR, { recursive: true });
     const filePath = path.join(UPLOAD_DIR, filename);
     await fs.writeFile(filePath, buffer);

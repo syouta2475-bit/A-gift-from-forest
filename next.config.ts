@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.microcms-assets.io" },
       // リアル写真用の Unsplash ドメイン
       { protocol: "https", hostname: "images.unsplash.com" },
+      // Supabase Storage 画像配信ドメイン（すべてのプロジェクト対応）
+      { protocol: "https", hostname: "*.supabase.co" },
+      { protocol: "https", hostname: "**.supabase.co" },
     ],
   },
   turbopack: {

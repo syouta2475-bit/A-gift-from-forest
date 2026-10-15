@@ -52,9 +52,12 @@ export async function uploadImageToSupabase(
   if (!supabase) return null;
 
   try {
-    const { data, error } = await supabase.storage
+    // 先頭のスラッシュを除去して統一
+    const cleanPath = filename.replace(/^\/+/, "");
+
+    const { error } = await supabase.storage
       .from(SUPABASE_STORAGE_BUCKET)
-      .upload(filename, buffer, {
+      .upload(cleanPath, buffer, {
         contentType,
         upsert: true,
       });
@@ -66,9 +69,16 @@ export async function uploadImageToSupabase(
 
     const { data: publicUrlData } = supabase.storage
       .from(SUPABASE_STORAGE_BUCKET)
-      .getPublicUrl(data.path);
+      .getPublicUrl(cleanPath);
 
-    return publicUrlData.publicUrl;
+    const publicUrl = publicUrlData?.publicUrl;
+    if (!publicUrl || !publicUrl.startsWith("http")) {
+      console.error("[uploadImageToSupabase] Invalid Public URL:", publicUrl);
+      return null;
+    }
+
+    console.log(`[Supabase Storage] Successfully uploaded to Public URL: ${publicUrl}`);
+    return publicUrl;
   } catch (err) {
     console.error("[uploadImageToSupabase error]", err);
     return null;
