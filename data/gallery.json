@@ -1,0 +1,51 @@
+[
+  {
+    "id": "g-acorn",
+    "imageUrl": "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
+    "caption": "木の実のチャーム",
+    "title": "どんぐりのお守りストラップ",
+    "tag": "Natural Craft",
+    "sortOrder": 1,
+    "isDeleted": false,
+    "createdAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "g-woodcraft",
+    "imageUrl": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+    "caption": "木のおうちとおもちゃ",
+    "title": "北欧風小さな木のおうち",
+    "tag": "Wood Work",
+    "sortOrder": 3,
+    "isDeleted": false,
+    "createdAt": "2026-10-02T00:00:00.000Z"
+  },
+  {
+    "id": "g-pinecone",
+    "imageUrl": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=800&q=80",
+    "caption": "森の木の実リース",
+    "title": "松ぼっくりとドライフラワーのリース",
+    "tag": "Botanical Wreath",
+    "sortOrder": 2,
+    "isDeleted": false,
+    "createdAt": "2026-10-03T00:00:00.000Z"
+  },
+  {
+    "id": "g-stall",
+    "imageUrl": "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=800&q=80",
+    "caption": "マルシェの風景",
+    "title": "木漏れ日の出店ブース",
+    "tag": "Marché Scene",
+    "sortOrder": 4,
+    "isDeleted": false,
+    "createdAt": "2026-10-04T00:00:00.000Z"
+  },
+  {
+    "id": "work-1792038000246-cr6n",
+    "imageUrl": "/uploads/work-1792037988505-u0a2gp.jpg",
+    "caption": "◎ぼっくりのリース",
+    "tag": "Natural Craft",
+    "sortOrder": 5,
+    "isDeleted": false,
+    "createdAt": "2026-10-15T04:20:00.246Z"
+  }
+]

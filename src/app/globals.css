@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Yomogi&display=swap');
+@import "tailwindcss";
+
+/* ============================================================
+   デザイントークン（森からのおくりもの）
+   どんぐり・松ぼっくりに似合う、温かくて可愛いハンドメイド配色
+   ============================================================ */
+:root {
+  --cream-50: #fffaf0;
+  --cream-100: #fbf1dc;
+  --beige-200: #f3e2c3;
+  --beige-300: #e9d0a6;
+
+  --acorn-900: #4a3220;
+  --acorn-700: #6b4423;
+  --acorn-500: #a8703a;
+  --acorn-300: #d9a86c;
+
+  --leaf-500: #6fa56a;
+  --leaf-200: #cfe6c4;
+  --leaf-100: #e6f2dd;
+
+  /* フォレストグリーン（カレンダーの出店日ドット・選択色） */
+  --forest-600: #3f7d52;
+  --forest-700: #2f6340;
+
+  --berry-300: #f4a9a0;
+  --berry-100: #fde1dc;
+
+  --honey-400: #f5c04a;
+  --honey-200: #fbe3a1;
+}
+
+@theme inline {
+  --color-cream-50: var(--cream-50);
+  --color-cream-100: var(--cream-100);
+  --color-beige-200: var(--beige-200);
+  --color-beige-300: var(--beige-300);
+  --color-acorn-900: var(--acorn-900);
+  --color-acorn-700: var(--acorn-700);
+  --color-acorn-500: var(--acorn-500);
+  --color-acorn-300: var(--acorn-300);
+  --color-leaf-500: var(--leaf-500);
+  --color-leaf-200: var(--leaf-200);
+  --color-leaf-100: var(--leaf-100);
+  --color-forest-600: var(--forest-600);
+  --color-forest-700: var(--forest-700);
+  --color-berry-300: var(--berry-300);
+  --color-berry-100: var(--berry-100);
+  --color-honey-400: var(--honey-400);
+  --color-honey-200: var(--honey-200);
+
+  /* 丸ゴシック（Zen Maru Gothic）を本文などのベースに */
+  --font-sans: var(--font-zen-maru), "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  /* 手仕事の温かみあふれる手書き教科書体（Klee One） */
+  --font-klee: var(--font-klee), "Klee One", "Hiragino Maru Gothic ProN", cursive, sans-serif;
+  /* たまランド風のおしゃれな手書き欧文レタリング（Caveat） */
+  --font-caveat: var(--font-caveat), "Caveat", cursive;
+  /* 手書きペン字・チョーク風フォント（Yomogi） */
+  --font-yomogi: "Yomogi", cursive, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--cream-50);
+  color: var(--acorn-900);
+  font-family: var(--font-sans);
+  /* 高齢の方にも読みやすい基本サイズ */
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+/* ============================================================
+   共通ユーティリティ
+   ============================================================ */
+
+/* 温かみのあるグラスモーフィズム（ふんわり白＋茶色の影） */
+@utility glass {
+  background: rgb(255 255 255 / 0.58);
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  border: 2px solid rgb(255 255 255 / 0.85);
+  box-shadow:
+    0 12px 36px rgb(107 68 35 / 0.14),
+    inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+/* うっすらドット柄（邪魔にならない可愛い背景） */
+@utility bg-dots {
+  background-image: radial-gradient(rgb(168 112 58 / 0.2) 1.6px, transparent 1.6px);
+  background-size: 24px 24px;
+}
+
+/* スクロールバーを隠す（横スクロールカルーセル用。スワイプ/ボタンで操作可能） */
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 縦書きテキスト（日本語の美しさを引き出すエディトリアルレイアウト用） */
+@utility vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 0.22em;
+}
+
+/* ============================================================
+   CMS リッチテキスト（content: HTML）の見た目
+   ============================================================ */
+.rich-text p {
+  margin-block: 0.6em;
+}
+.rich-text ul {
+  margin-block: 0.6em;
+  padding-left: 1.4em;
+  list-style: "・ ";
+}
+.rich-text li {
+  margin-block: 0.25em;
+}
+.rich-text strong {
+  font-weight: 700;
+  background: linear-gradient(transparent 60%, var(--honey-200) 60%);
+}
+.rich-text a {
+  color: var(--acorn-500);
+  text-decoration: underline;
+}
+
+/* 動きを減らす設定のユーザーへの配慮 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ============================================================
+   黒板（Chalkboard）とイーゼル装飾用スタイル
+   ============================================================ */
+.font-yomogi {
+  font-family: var(--font-yomogi), "Yomogi", cursive, sans-serif;
+}
+
+.chalk-text-shadow {
+  text-shadow: 0 0 1.5px rgba(250, 247, 242, 0.45);
+}
+
+.wood-frame-arch {
+  background: linear-gradient(145deg, #B58967, #8C6243);
+  border: 3px solid #5A4030;
+  border-radius: 150px 150px 18px 18px / 52px 52px 18px 18px;
+  padding: 13px;
+  box-shadow: 0 12px 28px rgba(90, 64, 48, 0.15);
+}
+
+.chalkboard-surface {
+  background: radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.06) 0%, transparent 65%), #3B2E26;
+  border: 2px solid #281E18;
+  border-radius: 138px 138px 10px 10px / 42px 42px 10px 10px;
+  padding: 18px 15px 20px;
+  color: #FAF7F2;
+}
+
+.easel-leg {
+  position: absolute;
+  bottom: -22px;
+  width: 18px;
+  height: 38px;
+  background: linear-gradient(180deg, #8C6243 0%, #5A4030 100%);
+  border: 2px solid #3E2B20;
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(60, 40, 25, 0.25);
+  z-index: 0;
+}
+.easel-leg.leg-left {
+  left: 28px;
+  transform: rotate(-10deg);
+}
+.easel-leg.leg-right {
+  right: 28px;
+  transform: rotate(10deg);
+}
+
+/* 黒板内リッチテキスト（文字色の被り・背景マーカー同化を完全解消） */
+.chalk-rich-text p {
+  margin-block: 0.5em;
+  color: rgba(250, 247, 242, 0.95);
+}
+.chalk-rich-text strong,
+.chalk-rich-text b {
+  font-weight: 700;
+  background: none !important; /* 一般の黄色マーカー背景を無効化 */
+  color: #FFFFFF !important;
+  text-decoration: underline;
+  text-decoration-color: rgba(243, 215, 155, 0.5); /* 柔らかな淡いチョーク下線 */
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+.chalk-rich-text ul {
+  margin-block: 0.5em;
+  padding-left: 0.5em;
+  list-style: none;
+}
+.chalk-rich-text li {
+  margin-block: 0.35em;
+  color: rgba(250, 247, 242, 0.95);
+}

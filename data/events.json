@@ -1,0 +1,135 @@
+[
+  {
+    "id": "event-2026-11-winter",
+    "startDate": "2026-11-14",
+    "endDate": "2026-11-14",
+    "time": "10:30〜15:30",
+    "location": "編集後",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=%E7%B7%A8%E9%9B%86%E5%BE%8C",
+    "title": "編集後",
+    "description": "編集後",
+    "highlights": [
+      "編集後"
+    ],
+    "publishAt": null,
+    "createdAt": "2026-10-05T10:00:00.000Z",
+    "updatedAt": "2026-10-15T04:34:25.989Z"
+  },
+  {
+    "id": "event-2026-12-xmas",
+    "startDate": "2026-12-19",
+    "endDate": "2026-12-20",
+    "time": "11:00〜16:30",
+    "location": "川越 蔵の街 クラフトビレッジ",
+    "mapUrl": "",
+    "title": "森のクリスマス手作りマーケット",
+    "description": "今年最後の出店です。松ぼっくりツリーや特別なギフトラッピングをご用意してお待ちしております。",
+    "highlights": [
+      "クリスマス限定・松ぼっくりツリー",
+      "自然木のちいさなキャンドルホルダー",
+      "大切な方への手作りギフトラッピング無料"
+    ],
+    "publishAt": null,
+    "createdAt": "2026-10-10T12:00:00.000Z",
+    "updatedAt": "2026-10-10T12:00:00.000Z"
+  },
+  {
+    "id": "event-1792037842411-anc26",
+    "startDate": "2026-11-24",
+    "endDate": "2026-11-24",
+    "time": "10:00〜18:00",
+    "location": "旧軽井沢郵便局前",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=%E6%97%A7%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%83%B5%E4%BE%BF%E5%B1%80%E5%89%8D",
+    "title": "軽井沢マルシェ",
+    "description": "テスト\nてすと\n漢字\nA \na\n@",
+    "highlights": [
+      "テスト",
+      "てすと",
+      "😊"
+    ],
+    "publishAt": null,
+    "createdAt": "2026-10-15T04:17:22.411Z",
+    "updatedAt": "2026-10-15T04:17:22.411Z"
+  },
+  {
+    "id": "event-1792037923483-k2vpf",
+    "startDate": "2026-11-24",
+    "endDate": "2026-11-24",
+    "time": "10:00〜16:00",
+    "location": "さくら公園 中央広場",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=%E3%81%95%E3%81%8F%E3%82%89%E5%85%AC%E5%9C%92%20%E4%B8%AD%E5%A4%AE%E5%BA%83%E5%A0%B4",
+    "title": "もりのマルシェ 秋のどんぐりまつり",
+    "description": "木漏れ日の心地よい季節になりました。工房でひとつずつ仕立てた、ほっこり温まる秋の新作をお届けします。",
+    "highlights": [
+      "小さなお子さまにも人気の木のおもちゃ",
+      "秋の新作・どんぐりお守りチャーム",
+      "松ぼっくりのミニリース"
+    ],
+    "publishAt": null,
+    "createdAt": "2026-10-15T04:18:43.483Z",
+    "updatedAt": "2026-10-15T04:18:43.483Z"
+  },
+  {
+    "id": "event-1792039024431-rl62t",
+    "startDate": "2026-10-21",
+    "endDate": "2026-10-22",
+    "time": "10:00〜18:00",
+    "location": "未来＋複数日",
+    "mapUrl": "https://www.bing.com/maps/search?name=%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%83%B5%E4%BE%BF%E5%B1%80&mepi=0%7E%7EEmbedded%7ELargeMapLink&FORM=MPSRPL&style=r&ss=id.ypid%3AYNE6CAF7AA05B98532&q=%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%83%B5%E4%BE%BF%E5%B1%80&ppois=36.35831069946289_138.6355438232422_%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%83%B5%E4%BE%BF%E5%B1%80&cp=36.358311%7E138.635544&lvl=15",
+    "title": "テスト",
+    "description": "テスト\n箇条書きなし",
+    "highlights": [],
+    "publishAt": null,
+    "createdAt": "2026-10-15T04:37:04.431Z",
+    "updatedAt": "2026-10-15T04:37:49.712Z"
+  },
+  {
+    "id": "event-1792039148761-2o4xw",
+    "startDate": "2026-09-29",
+    "endDate": "2026-09-29",
+    "time": "8:00〜16:00",
+    "location": "過去日",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=%E9%81%8E%E5%8E%BB%E6%97%A5",
+    "title": "過去日・単日",
+    "description": "テスト",
+    "highlights": [
+      "木の実の作品展示",
+      "作家との交流"
+    ],
+    "publishAt": null,
+    "createdAt": "2026-10-15T04:39:08.761Z",
+    "updatedAt": "2026-10-15T04:39:08.761Z"
+  },
+  {
+    "id": "event-1792040245800-vdyn6",
+    "startDate": "2026-10-21",
+    "endDate": "2026-10-21",
+    "time": "10:00〜16:00",
+    "location": "重複日、地図なし、改行",
+    "title": "テスト",
+    "description": "テスト\n改行\n箇条書きなし",
+    "highlights": [],
+    "publishAt": null,
+    "createdAt": "2026-10-15T04:57:25.800Z",
+    "updatedAt": "2026-10-15T04:57:25.800Z"
+  },
+  {
+    "id": "event-1792040350710-rjgyr",
+    "startDate": "2026-10-29",
+    "endDate": "2026-10-30",
+    "time": "10:00〜16:00",
+    "location": "箇条書き、地図アリ",
+    "mapUrl": "https://www.bing.com/maps/search?name=%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%83%B5%E4%BE%BF%E5%B1%80&mepi=0%7E%7EEmbedded%7ELargeMapLink&FORM=MPSRPL&style=r&ss=id.ypid%3AYNE6CAF7AA05B98532&q=%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%83%B5%E4%BE%BF%E5%B1%80&ppois=36.35831069946289_138.6355438232422_%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%83%B5%E4%BE%BF%E5%B1%80&cp=36.358311%7E138.635544&lvl=15",
+    "title": "テスト",
+    "description": "テスト\n\n空行",
+    "highlights": [
+      "箇条書き１",
+      "箇条書き２",
+      "箇条書き３",
+      "箇条書き４MAX"
+    ],
+    "publishAt": null,
+    "createdAt": "2026-10-15T04:59:10.710Z",
+    "updatedAt": "2026-10-15T04:59:10.710Z"
+  }
+]
