@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { checkAdminAuthFromRequest } from "@/lib/auth";
 import { loadReviews, saveReviews, deleteReviewFromSupabase } from "@/lib/store";
 
@@ -41,6 +42,11 @@ export async function PATCH(request: Request) {
     review.ownerReply = ownerReply ? String(ownerReply).trim() : undefined;
     await saveReviews(reviews);
 
+    // キャッシュ破棄
+    revalidatePath("/", "page");
+    revalidatePath("/");
+    revalidatePath("/admin");
+
     return NextResponse.json({ success: true, review });
   } catch (err) {
     console.error("[Reviews PATCH error]", err);
@@ -72,6 +78,12 @@ export async function DELETE(request: Request) {
 
     await deleteReviewFromSupabase(id);
     await saveReviews(filtered);
+
+    // キャッシュ破棄
+    revalidatePath("/", "page");
+    revalidatePath("/");
+    revalidatePath("/admin");
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[Reviews DELETE error]", err);

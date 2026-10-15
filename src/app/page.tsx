@@ -9,8 +9,8 @@ import { ReviewListSkeleton } from "@/components/reviews/ReviewListSkeleton";
 import { Footer } from "@/components/Footer";
 import { getGalleryWorks } from "@/lib/gallery";
 
-// 1時間ごとに再生成（管理画面更新後もオンデマンドで即時反映）
-export const revalidate = 3600;
+// 管理画面からの更新や出店日の日時計算を即座にリアルタイム反映
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const galleryWorks = await getGalleryWorks();

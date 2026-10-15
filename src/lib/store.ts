@@ -12,13 +12,14 @@ const REVIEWS_FILE = path.join(DATA_DIR, "reviews.json");
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
- * 有効なUUIDであることを保証（空文字・非UUIDなら crypto.randomUUID() を生成）
+ * 有効な文字列IDであることを保証（空文字やnull・undefinedなら crypto.randomUUID() を生成）
+ * DB の id カラムが text 型になったため、既存の ID（UUID形式または英数字記号）をそのまま保持します。
  * 絶対に null や undefined を返しません。
  */
-export function safeUuid(rawId?: string | null): string {
+export function safeId(rawId?: string | null): string {
   if (rawId && typeof rawId === "string") {
     const trimmed = rawId.trim();
-    if (trimmed !== "" && UUID_REGEX.test(trimmed)) {
+    if (trimmed !== "") {
       return trimmed;
     }
   }
@@ -26,7 +27,8 @@ export function safeUuid(rawId?: string | null): string {
 }
 
 /** 後方互換用エイリアス */
-export const ensureUuid = safeUuid;
+export const safeUuid = safeId;
+export const ensureUuid = safeId;
 
 /* ============================================================
    初期静的データ（インメモリ・安全なフォールバック用）
@@ -274,7 +276,8 @@ export async function deleteEventFromSupabase(id: string): Promise<void> {
     const supabase = getSupabaseClient();
     if (supabase) {
       try {
-        const { error } = await supabase.from("events").delete().eq("id", id);
+        const cleanId = String(id).trim();
+        const { error } = await supabase.from("events").delete().eq("id", cleanId);
         if (error) console.error("[Supabase deleteEvent error]", error);
       } catch (err) {
         console.error("[Supabase deleteEvent exception]", err);
@@ -320,8 +323,14 @@ export async function loadGallery(): Promise<GalleryWork[]> {
 }
 
 export async function saveGallery(works: GalleryWork[]): Promise<void> {
+  // 安全装置：表示状態（!isDeleted）の作品が0件になる場合は保存をブロック
+  const visibleCount = works.filter((w) => !w.isDeleted).length;
+  if (works.length > 0 && visibleCount === 0) {
+    throw new Error("少なくとも1つの作品は表示状態にする必要があります（全件非表示はできません）。");
+  }
+
   const rows = works.map((w) => {
-    const validId = safeUuid(w.id);
+    const validId = safeId(w.id);
     w.id = validId;
     return {
       id: validId,
@@ -354,7 +363,8 @@ export async function deleteGalleryFromSupabase(id: string): Promise<void> {
     const supabase = getSupabaseClient();
     if (supabase) {
       try {
-        const { error } = await supabase.from("gallery_items").delete().eq("id", id);
+        const cleanId = String(id).trim();
+        const { error } = await supabase.from("gallery_items").delete().eq("id", cleanId);
         if (error) console.error("[Supabase deleteGallery error]", error);
       } catch (err) {
         console.error("[Supabase deleteGallery exception]", err);
@@ -401,7 +411,7 @@ export async function loadReviews(): Promise<Review[]> {
 export async function saveReviews(reviews: Review[]): Promise<void> {
   // すべての口コミに有効なUUIDが割り当てられていることを保証（nullやundefinedを100%排除）
   const rows = reviews.map((r) => {
-    const validId = safeUuid(r.id);
+    const validId = safeId(r.id);
     r.id = validId;
     return {
       id: validId,
@@ -435,7 +445,8 @@ export async function deleteReviewFromSupabase(id: string): Promise<void> {
     const supabase = getSupabaseClient();
     if (supabase) {
       try {
-        const { error } = await supabase.from("reviews").delete().eq("id", id);
+        const cleanId = String(id).trim();
+        const { error } = await supabase.from("reviews").delete().eq("id", cleanId);
         if (error) console.error("[Supabase deleteReview error]", error);
       } catch (err) {
         console.error("[Supabase deleteReview exception]", err);

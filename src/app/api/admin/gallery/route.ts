@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import crypto from "crypto";
 import { checkAdminAuthFromRequest } from "@/lib/auth";
 import { loadGallery, saveGallery, deleteGalleryFromSupabase } from "@/lib/store";
@@ -50,6 +51,11 @@ export async function POST(request: Request) {
     works.push(newWork);
     await saveGallery(works);
 
+    // キャッシュを破棄して公開画面および管理画面に即座に反映
+    revalidatePath("/", "page");
+    revalidatePath("/");
+    revalidatePath("/admin");
+
     return NextResponse.json({ success: true, work: newWork });
   } catch (err) {
     console.error("[Gallery POST error]", err);
@@ -79,6 +85,12 @@ export async function PATCH(request: Request) {
         works[idxA].sortOrder = works[idxB].sortOrder;
         works[idxB].sortOrder = temp;
         await saveGallery(works);
+
+        // キャッシュ破棄
+        revalidatePath("/", "page");
+        revalidatePath("/");
+        revalidatePath("/admin");
+
         return NextResponse.json({ success: true });
       }
     }
@@ -91,6 +103,16 @@ export async function PATCH(request: Request) {
       }
 
       if (typeof isDeleted === "boolean") {
+        // 安全装置：非表示化しようとした結果、表示中作品が0件になる場合はブロック
+        if (isDeleted) {
+          const remainingVisible = works.filter((w) => (w.id === id ? false : !w.isDeleted)).length;
+          if (remainingVisible === 0) {
+            return NextResponse.json(
+              { error: "少なくとも1つの作品は表示状態にする必要があります（全件非表示はできません）。" },
+              { status: 400 }
+            );
+          }
+        }
         work.isDeleted = isDeleted;
       }
       if (typeof sortOrder === "number") {
@@ -98,13 +120,20 @@ export async function PATCH(request: Request) {
       }
 
       await saveGallery(works);
+
+      // キャッシュ破棄
+      revalidatePath("/", "page");
+      revalidatePath("/");
+      revalidatePath("/admin");
+
       return NextResponse.json({ success: true, work });
     }
 
     return NextResponse.json({ error: "リクエストパラメータが不足しています。" }, { status: 400 });
   } catch (err) {
     console.error("[Gallery PATCH error]", err);
-    return NextResponse.json({ error: "更新処理に失敗しました。" }, { status: 500 });
+    const msg = err instanceof Error ? err.message : "更新処理に失敗しました。";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
 
@@ -128,11 +157,27 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "作品が見つかりません。" }, { status: 404 });
     }
 
+    // 安全装置：削除によって表示中の作品が0件になってしまう場合はブロック
+    const remainingVisible = filtered.filter((w) => !w.isDeleted).length;
+    if (remainingVisible === 0) {
+      return NextResponse.json(
+        { error: "少なくとも1つの作品は表示状態にする必要があります（表示中の作品をすべて削除することはできません）。" },
+        { status: 400 }
+      );
+    }
+
     await deleteGalleryFromSupabase(id);
     await saveGallery(filtered);
+
+    // キャッシュ破棄
+    revalidatePath("/", "page");
+    revalidatePath("/");
+    revalidatePath("/admin");
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[Gallery DELETE error]", err);
-    return NextResponse.json({ error: "削除処理に失敗しました。" }, { status: 500 });
+    const msg = err instanceof Error ? err.message : "削除処理に失敗しました。";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

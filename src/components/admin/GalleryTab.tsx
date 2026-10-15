@@ -102,10 +102,14 @@ export function GalleryTab({ works, onRefresh }: GalleryTabProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, isDeleted }),
       });
-      if (!res.ok) throw new Error("ステータス変更失敗");
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "ステータス変更に失敗しました。");
+        return;
+      }
       onRefresh();
     } catch {
-      alert("更新中にエラーが発生しました。");
+      alert("通信エラーが発生しました。");
     }
   };
 
@@ -115,10 +119,14 @@ export function GalleryTab({ works, onRefresh }: GalleryTabProps) {
 
     try {
       const res = await fetch(`/api/admin/gallery?id=${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("完全削除失敗");
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "削除に失敗しました。");
+        return;
+      }
       onRefresh();
     } catch {
-      alert("削除中にエラーが発生しました。");
+      alert("通信エラーが発生しました。");
     }
   };
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import crypto from "crypto";
 import { checkAdminAuthFromRequest } from "@/lib/auth";
 import { loadEvents, saveEvents } from "@/lib/store";
@@ -69,6 +70,11 @@ export async function POST(request: Request) {
     const events = await loadEvents();
     events.push(newEvent);
     await saveEvents(events);
+
+    // キャッシュを破棄して公開画面および管理画面に即座に反映
+    revalidatePath("/", "page");
+    revalidatePath("/");
+    revalidatePath("/admin");
 
     return NextResponse.json({ success: true, event: newEvent });
   } catch (err) {

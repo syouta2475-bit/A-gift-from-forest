@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
@@ -211,6 +212,11 @@ export async function POST(request: Request) {
     const reviews = await loadReviews();
     reviews.unshift(newReview);
     await saveReviews(reviews);
+
+    // キャッシュを破棄して公開画面および管理画面に即座に反映
+    revalidatePath("/", "page");
+    revalidatePath("/");
+    revalidatePath("/admin");
 
     // 6. 管理者へのLINE・メール非同期通知（レスポンスをブロックしない）
     notifyNewReview({

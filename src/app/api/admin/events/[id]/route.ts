@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { checkAdminAuthFromRequest } from "@/lib/auth";
 import { loadEvents, saveEvents, deleteEventFromSupabase } from "@/lib/store";
 
@@ -59,6 +60,12 @@ export async function PUT(request: Request, { params }: Params) {
     };
 
     await saveEvents(events);
+
+    // キャッシュを破棄して公開画面および管理画面に即座に反映
+    revalidatePath("/", "page");
+    revalidatePath("/");
+    revalidatePath("/admin");
+
     return NextResponse.json({ success: true, event: events[index] });
   } catch (err) {
     console.error("[Event PUT error]", err);
@@ -84,6 +91,12 @@ export async function DELETE(request: Request, { params }: Params) {
 
     await deleteEventFromSupabase(id);
     await saveEvents(filtered);
+
+    // キャッシュを破棄して公開画面および管理画面に即座に反映
+    revalidatePath("/", "page");
+    revalidatePath("/");
+    revalidatePath("/admin");
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[Event DELETE error]", err);
