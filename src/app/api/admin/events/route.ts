@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import { checkAdminAuthFromRequest } from "@/lib/auth";
 import { loadEvents, saveEvents } from "@/lib/store";
 import type { MarcheEvent } from "@/types";
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
     const cleanedMapUrl = mapUrl && String(mapUrl).trim() !== "" ? String(mapUrl).trim() : null;
 
     const newEvent: MarcheEvent = {
-      id: `event-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      id: crypto.randomUUID(),
       startDate: rawStart,
       endDate: rawEnd,
       time: String(time).trim(),

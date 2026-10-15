@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { checkAdminAuthFromRequest } from "@/lib/auth";
-import { loadEvents, saveEvents } from "@/lib/store";
+import { loadEvents, saveEvents, deleteEventFromSupabase } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -82,6 +82,7 @@ export async function DELETE(request: Request, { params }: Params) {
       return NextResponse.json({ error: "イベントが見つかりません。" }, { status: 404 });
     }
 
+    await deleteEventFromSupabase(id);
     await saveEvents(filtered);
     return NextResponse.json({ success: true });
   } catch (err) {

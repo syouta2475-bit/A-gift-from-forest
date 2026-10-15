@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import { checkAdminAuthFromRequest } from "@/lib/auth";
-import { loadGallery, saveGallery } from "@/lib/store";
+import { loadGallery, saveGallery, deleteGalleryFromSupabase } from "@/lib/store";
 import type { GalleryWork } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
     const maxSort = works.reduce((max, w) => Math.max(max, w.sortOrder || 0), 0);
 
     const newWork: GalleryWork = {
-      id: `work-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      id: crypto.randomUUID(),
       imageUrl: String(imageUrl).trim(),
       caption: String(caption).trim(),
       title: title ? String(title).trim() : undefined,
@@ -127,6 +128,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "作品が見つかりません。" }, { status: 404 });
     }
 
+    await deleteGalleryFromSupabase(id);
     await saveGallery(filtered);
     return NextResponse.json({ success: true });
   } catch (err) {

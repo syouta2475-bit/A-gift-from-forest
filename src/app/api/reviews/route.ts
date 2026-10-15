@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
+import crypto from "crypto";
 import { getReviews } from "@/lib/reviews";
 import { loadReviews, saveReviews } from "@/lib/store";
 import { notifyNewReview } from "@/lib/notify";
@@ -193,7 +194,7 @@ export async function POST(request: Request) {
 
     // 4. データ作成（IPアドレスやUserAgent等は一切記録しない）
     const newReview: Review = {
-      id: `rev-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      id: crypto.randomUUID(),
       nickname: nickResult.value,
       comment: commentResult.value,
       userImage,

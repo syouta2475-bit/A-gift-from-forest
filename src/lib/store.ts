@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import crypto from "crypto";
 import type { MarcheEvent, GalleryWork, Review } from "@/types";
 import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
 
@@ -7,6 +8,16 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const EVENTS_FILE = path.join(DATA_DIR, "events.json");
 const GALLERY_FILE = path.join(DATA_DIR, "gallery.json");
 const REVIEWS_FILE = path.join(DATA_DIR, "reviews.json");
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** 有効なUUIDであることを保証（無効または未設定なら crypto.randomUUID() を生成） */
+export function ensureUuid(id?: string | null): string {
+  if (id && UUID_REGEX.test(id)) {
+    return id;
+  }
+  return crypto.randomUUID();
+}
 
 /** ディレクトリと初期データの存在を保証（ローカルフォールバック用） */
 async function ensureInit() {
@@ -203,11 +214,16 @@ export async function loadEvents(): Promise<MarcheEvent[]> {
 }
 
 export async function saveEvents(events: MarcheEvent[]): Promise<void> {
+  // すべてのイベントに有効なUUIDが付与されていることを保証
+  for (const e of events) {
+    e.id = ensureUuid(e.id);
+  }
+
   const supabase = getSupabaseClient();
   if (supabase) {
     try {
       const rows = events.map((e) => ({
-        id: e.id.includes("-") && e.id.length === 36 ? e.id : undefined, // UUIDのみ渡す
+        id: e.id,
         start_date: e.startDate,
         end_date: e.endDate,
         time: e.time,
@@ -219,7 +235,7 @@ export async function saveEvents(events: MarcheEvent[]): Promise<void> {
         publish_at: e.publishAt || null,
       }));
 
-      // 全件upsert
+      // 全件upsert（idは必ずUUID形式）
       const { error } = await supabase.from("events").upsert(rows);
       if (error) console.error("[Supabase saveEvents error]", error);
     } catch (err) {
@@ -230,6 +246,18 @@ export async function saveEvents(events: MarcheEvent[]): Promise<void> {
   // ローカル JSON も常に同期
   await ensureInit();
   await fs.writeFile(EVENTS_FILE, JSON.stringify(events, null, 2), "utf-8");
+}
+
+export async function deleteEventFromSupabase(id: string): Promise<void> {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { error } = await supabase.from("events").delete().eq("id", id);
+      if (error) console.error("[Supabase deleteEvent error]", error);
+    } catch (err) {
+      console.error("[Supabase deleteEvent exception]", err);
+    }
+  }
 }
 
 /* ============================================================
@@ -268,11 +296,16 @@ export async function loadGallery(): Promise<GalleryWork[]> {
 }
 
 export async function saveGallery(works: GalleryWork[]): Promise<void> {
+  // すべての作品に有効なUUIDが付与されていることを保証
+  for (const w of works) {
+    w.id = ensureUuid(w.id);
+  }
+
   const supabase = getSupabaseClient();
   if (supabase) {
     try {
       const rows = works.map((w) => ({
-        id: w.id.includes("-") && w.id.length === 36 ? w.id : undefined,
+        id: w.id,
         image_url: w.imageUrl,
         title: w.title || null,
         caption: w.caption,
@@ -288,6 +321,18 @@ export async function saveGallery(works: GalleryWork[]): Promise<void> {
 
   await ensureInit();
   await fs.writeFile(GALLERY_FILE, JSON.stringify(works, null, 2), "utf-8");
+}
+
+export async function deleteGalleryFromSupabase(id: string): Promise<void> {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { error } = await supabase.from("gallery_items").delete().eq("id", id);
+      if (error) console.error("[Supabase deleteGallery error]", error);
+    } catch (err) {
+      console.error("[Supabase deleteGallery exception]", err);
+    }
+  }
 }
 
 /* ============================================================
@@ -325,11 +370,16 @@ export async function loadReviews(): Promise<Review[]> {
 }
 
 export async function saveReviews(reviews: Review[]): Promise<void> {
+  // すべての口コミに有効なUUIDが付与されていることを保証
+  for (const r of reviews) {
+    r.id = ensureUuid(r.id);
+  }
+
   const supabase = getSupabaseClient();
   if (supabase) {
     try {
       const rows = reviews.map((r) => ({
-        id: r.id.includes("-") && r.id.length === 36 ? r.id : undefined,
+        id: r.id,
         nickname: r.nickname,
         comment: r.comment,
         image_url: r.userImage?.url || null,
@@ -345,4 +395,16 @@ export async function saveReviews(reviews: Review[]): Promise<void> {
 
   await ensureInit();
   await fs.writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 2), "utf-8");
+}
+
+export async function deleteReviewFromSupabase(id: string): Promise<void> {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { error } = await supabase.from("reviews").delete().eq("id", id);
+      if (error) console.error("[Supabase deleteReview error]", error);
+    } catch (err) {
+      console.error("[Supabase deleteReview exception]", err);
+    }
+  }
 }

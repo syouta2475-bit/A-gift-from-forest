@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { checkAdminAuthFromRequest } from "@/lib/auth";
-import { loadReviews, saveReviews } from "@/lib/store";
+import { loadReviews, saveReviews, deleteReviewFromSupabase } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +70,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "口コミが見つかりません。" }, { status: 404 });
     }
 
+    await deleteReviewFromSupabase(id);
     await saveReviews(filtered);
     return NextResponse.json({ success: true });
   } catch (err) {
