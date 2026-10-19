@@ -58,6 +58,8 @@
   --font-caveat: var(--font-caveat), "Caveat", cursive;
   /* 手書きペン字・チョーク風フォント（Yomogi） */
   --font-yomogi: "Yomogi", cursive, sans-serif;
+  /* 上質で静けさのある明朝体（Shippori Mincho） */
+  --font-shippori: var(--font-shippori), "Shippori Mincho", "Noto Serif JP", serif;
 }
 
 html {

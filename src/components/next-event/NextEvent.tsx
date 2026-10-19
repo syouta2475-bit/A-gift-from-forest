@@ -2,7 +2,9 @@ import { getEvents, pickNextEvent } from "@/lib/events";
 import { loadSettings } from "@/lib/store";
 import { NextEventCard } from "./NextEventCard";
 import { Reveal } from "@/components/ui/Reveal";
-import { OwlIllust, ChalkWavyLine } from "@/components/ui/Icons";
+import { ChalkWavyLine } from "@/components/ui/Icons";
+import { MozSilhouette } from "@/components/ui/MozSilhouette";
+import { ForestIcon } from "@/components/ui/ForestIcon";
 
 /**
  * Next Event セクション（サーバーコンポーネント）。
@@ -22,13 +24,21 @@ export async function NextEvent() {
       aria-labelledby="next-event-title"
       className="relative overflow-hidden bg-cream-100/60 py-24 sm:py-32"
     >
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+      {/* ── 背景のMOZ風大型シルエット（右下: マルシェ出店ブース） ── */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-12 bottom-6 opacity-35 select-none z-0"
+      >
+        <MozSilhouette variant="marche" className="w-80 sm:w-96 md:w-[420px] h-auto" color="#C8AD90" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 z-10">
         <Reveal className="mb-12">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <ForestIcon name="marche-booth" size={30} color="#6B4423" />
             <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-2">
               Next Marché
             </span>
-            <OwlIllust className="w-12 sm:w-14 h-auto drop-shadow-xs" />
           </div>
           <h2
             id="next-event-title"

@@ -1,7 +1,9 @@
 import { getReviews } from "@/lib/reviews";
 import { Reveal } from "@/components/ui/Reveal";
 import { ReviewBoardClient } from "./ReviewBoardClient";
-import { ChalkWavyLine, AcornIllust } from "@/components/ui/Icons";
+import { ChalkWavyLine } from "@/components/ui/Icons";
+import { MozSilhouette } from "@/components/ui/MozSilhouette";
+import { ForestIcon } from "@/components/ui/ForestIcon";
 
 /** 口コミボード（Review Board）セクション */
 export async function ReviewBoardSection() {
@@ -15,19 +17,28 @@ export async function ReviewBoardSection() {
     >
       <div className="bg-dots pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
 
-      {/* ── 背景の透かしどんぐり ── */}
+      {/* ── 背景のMOZ風大型シルエット（左下: どんぐりウサギ、右上: 松ぼっくりネズミ） ── */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-8 -bottom-10 opacity-[0.09] select-none"
+        className="pointer-events-none absolute -left-12 bottom-6 opacity-35 select-none z-0"
       >
-        <AcornIllust className="w-64 h-auto" />
+        <MozSilhouette variant="rabbit" className="w-64 sm:w-80 h-auto" color="#C8AD90" />
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-12 top-10 opacity-35 select-none z-0"
+      >
+        <MozSilhouette variant="mouse" className="w-64 sm:w-80 h-auto rotate-6" color="#C8AD90" />
       </div>
 
-      <div className="relative mx-auto max-w-3xl px-5">
+      <div className="relative mx-auto max-w-3xl px-5 z-10">
         <Reveal className="text-center">
-          <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-2 inline-block">
-            Voice & Message
-          </span>
+          <div className="flex items-center justify-center gap-2">
+            <ForestIcon name="message" size={26} color="#6B4423" />
+            <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-2 inline-block">
+              Voice &amp; Message
+            </span>
+          </div>
           <h2
             id="reviews-title"
             className="mt-1 font-klee text-3xl font-semibold text-acorn-900 sm:text-4xl"

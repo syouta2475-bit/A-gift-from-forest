@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Zen_Maru_Gothic, Klee_One, Caveat } from "next/font/google";
+import { Zen_Maru_Gothic, Klee_One, Caveat, Shippori_Mincho } from "next/font/google";
 import { ChalkFilterDefs } from "@/components/ui/Icons";
 import "./globals.css";
 
@@ -27,6 +27,14 @@ const caveat = Caveat({
   display: "swap",
 });
 
+// 上質で静けさのある明朝体（NSL風スプラッシュ・コピー演出用）
+const shippori = Shippori_Mincho({
+  variable: "--font-shippori",
+  weight: ["400", "500", "600"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "森からのおくりもの | マルシェ出店情報・口コミ",
   description:
@@ -43,7 +51,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja" className={`${zenMaru.variable} ${kleeOne.variable} ${caveat.variable}`}>
+    <html
+      lang="ja"
+      className={`${zenMaru.variable} ${kleeOne.variable} ${caveat.variable} ${shippori.variable}`}
+    >
       <body className="min-h-dvh antialiased">
         {/* 全SVG手描きイラスト用のチョーク質感フィルター */}
         <ChalkFilterDefs />

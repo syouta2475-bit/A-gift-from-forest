@@ -4,6 +4,8 @@ import { getEvents, pickNextEvent } from "@/lib/events";
 import { Reveal } from "@/components/ui/Reveal";
 import { Calendar } from "./Calendar";
 import { ChalkWavyLine } from "@/components/ui/Icons";
+import { MozSilhouette } from "@/components/ui/MozSilhouette";
+import { ForestIcon } from "@/components/ui/ForestIcon";
 
 /**
  * Calendar セクション（サーバーコンポーネント）。
@@ -23,11 +25,22 @@ export async function CalendarSection() {
       aria-labelledby="calendar-title"
       className="relative overflow-hidden bg-cream-50 py-24 sm:py-32"
     >
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+      {/* ── 背景のMOZ風大型シルエット（左下: 北欧ツリー） ── */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-14 bottom-4 opacity-35 select-none z-0"
+      >
+        <MozSilhouette variant="tree" className="w-64 sm:w-80 md:w-96 h-auto" color="#C8AD90" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 z-10">
         <Reveal className="mb-12">
-          <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-2 inline-block">
-            Schedule & Calendar
-          </span>
+          <div className="flex items-center gap-2.5">
+            <ForestIcon name="calendar" size={28} color="#6B4423" />
+            <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-2">
+              Schedule &amp; Calendar
+            </span>
+          </div>
           <h2
             id="calendar-title"
             className="mt-1 font-klee text-3xl sm:text-4xl lg:text-5xl font-semibold text-acorn-900"

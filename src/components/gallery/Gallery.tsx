@@ -4,7 +4,9 @@ import Image from "next/image";
 import { useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/ui/Reveal";
-import { WreathIllust, ChalkWavyLine } from "@/components/ui/Icons";
+import { ChalkWavyLine } from "@/components/ui/Icons";
+import { MozSilhouette } from "@/components/ui/MozSilhouette";
+import { ForestIcon } from "@/components/ui/ForestIcon";
 import type { GalleryWork } from "@/types";
 
 const FALLBACK_ITEMS = [
@@ -44,7 +46,7 @@ type GalleryProps = {
 
 /**
  * Gallery：横スクロールのモダンカルーセル。
- * たまランド風の手描きレタリングと贅沢なリースあしらいで、温かいクラフト感を表現。
+ * MOZ風シルエットの背景と、新ロゴ準拠の線画リースアイコン。
  * 管理画面からの追加・並び替え・論理削除と完全連動。
  */
 export function Gallery({ works }: GalleryProps) {
@@ -74,20 +76,26 @@ export function Gallery({ works }: GalleryProps) {
       aria-labelledby="gallery-title"
       className="relative overflow-hidden bg-cream-50 py-24 sm:py-32"
     >
-      {/* ── 背景の透かしリース（たまランド風） ── */}
+      {/* ── 背景のMOZ風大型シルエット（左下: 松ぼっくり＆どんぐり、右上: 大判リース） ── */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-14 -bottom-10 opacity-[0.08] select-none"
+        className="pointer-events-none absolute -left-12 -bottom-10 opacity-40 select-none z-0"
       >
-        <WreathIllust className="w-80 sm:w-96 h-auto" />
+        <MozSilhouette variant="pinecone-acorn" className="w-72 sm:w-88 md:w-96 h-auto" color="#C8AD90" />
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-16 -top-12 opacity-35 select-none z-0"
+      >
+        <MozSilhouette variant="wreath" className="w-80 sm:w-96 md:w-[420px] h-auto rotate-12" color="#C8AD90" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 z-10">
         {/* 見出しブロック */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <Reveal>
             <div className="flex items-center gap-3">
-              <WreathIllust className="w-14 sm:w-16 h-auto drop-shadow-xs" />
+              <ForestIcon name="ribbon-wreath" size={32} color="#6B4423" />
               <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-2">
                 Handmade Works
               </span>

@@ -2,13 +2,9 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  PineconeIllust,
-  BotanicalTreeIllust,
-  CommunicationIllust,
-  ChalkWavyLine,
-  NordicHouseIllust,
-} from "@/components/ui/Icons";
+import { ChalkWavyLine } from "@/components/ui/Icons";
+import { MozSilhouette } from "@/components/ui/MozSilhouette";
+import { ForestIcon } from "@/components/ui/ForestIcon";
 
 const COMMITMENTS = [
   {
@@ -29,7 +25,7 @@ const COMMITMENTS = [
     ),
     image: "/images/commitment-01-pinecone.jpg",
     imageAlt: "松ぼっくりと森の玉ボケ写真",
-    illust: <PineconeIllust className="w-16 sm:w-20 h-auto" />,
+    iconName: "pinecone" as const,
   },
   {
     num: "02",
@@ -48,7 +44,7 @@ const COMMITMENTS = [
     ),
     image: "/images/commitment-02-atelier.jpg",
     imageAlt: "工房の作業机と麻袋の松ぼっくり写真",
-    illust: <BotanicalTreeIllust className="w-16 sm:w-20 h-auto" />,
+    iconName: "tree" as const,
   },
   {
     num: "03",
@@ -67,7 +63,7 @@ const COMMITMENTS = [
     ),
     image: "/images/commitment-03-marche.jpg",
     imageAlt: "木漏れ日のマルシェのボケ風景写真",
-    illust: <CommunicationIllust className="w-20 sm:w-24 h-auto" />,
+    iconName: "marche-booth" as const,
   },
 ] as const;
 
@@ -75,14 +71,22 @@ export function Concept() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="concept" aria-labelledby="concept-title" className="relative bg-cream-50">
-      {/* ── 背景の透かしイラスト（セクション内に閉じ込めて横揺れを完全防止） ── */}
+    <section id="concept" aria-labelledby="concept-title" className="relative bg-cream-50 overflow-hidden">
+      {/* ── 背景のMOZ風大型シルエット（左上: 木の実を届ける小鳥、右下: 松ぼっくりネズミとキノコ） ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-10" aria-hidden="true">
-        <div className="absolute -right-12 top-24 opacity-[0.07]">
-          <BotanicalTreeIllust className="w-72 sm:w-96 h-auto" />
+        <div className="absolute -left-12 top-20 sm:-left-6 sm:top-24">
+          <MozSilhouette
+            variant="bird"
+            className="w-72 sm:w-88 md:w-96 h-auto opacity-40 rotate-6"
+            color="#C8AD90"
+          />
         </div>
-        <div className="absolute -left-16 bottom-36 opacity-[0.07]">
-          <PineconeIllust className="w-72 sm:w-[420px] h-auto" />
+        <div className="absolute -right-16 top-[42%] sm:-right-10">
+          <MozSilhouette
+            variant="mouse"
+            className="w-72 sm:w-88 md:w-[400px] h-auto opacity-40 -rotate-3"
+            color="#C8AD90"
+          />
         </div>
         {/* ほのかな環境光 */}
         <div className="absolute -right-20 top-28 h-80 w-80 rounded-full bg-leaf-100/35 blur-3xl" />
@@ -90,11 +94,10 @@ export function Concept() {
       </div>
 
       {/* ============================================================
-          Part 1: Story & Philosophy（明るく爽やかな見上げる森 ＋ 和紙風カード）
-          確実・安定して画面内にフェードイン表示される構成
+          Part 1: CONCEPT（余白をたっぷりとった上質なコンセプト導入）
           ============================================================ */}
-      <div className="relative py-20 sm:py-28 md:py-32 px-4 sm:px-6 flex items-center justify-center min-h-[85vh]">
-        {/* 見上げる緑の森（木々の間から光が差す明るく爽やかな木漏れ日写真） */}
+      <div className="relative py-24 sm:py-32 md:py-40 px-5 sm:px-8 flex items-center justify-center min-h-[85vh]">
+        {/* 背景：見上げる爽やかな木漏れ日の森 */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
           <Image
             src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80"
@@ -104,97 +107,59 @@ export function Concept() {
             className="object-cover brightness-[1.08] saturate-[1.12]"
             priority
           />
-          {/* 上下のふんわりクリーム色グラデーションフェード */}
-          <div className="absolute inset-x-0 top-0 h-32 sm:h-48 bg-gradient-to-b from-[#fffaf0] via-[#fffaf0]/80 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-32 sm:h-48 bg-gradient-to-t from-[#fffaf0] via-[#fffaf0]/80 to-transparent" />
-          {/* 爽やかな木漏れ日の光芒オーバーレイ */}
+          {/* 上下のふんわりクリーム色フェード */}
+          <div className="absolute inset-x-0 top-0 h-36 sm:h-52 bg-gradient-to-b from-[#fffaf0] via-[#fffaf0]/80 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-36 sm:h-52 bg-gradient-to-t from-[#fffaf0] via-[#fffaf0]/80 to-transparent" />
           <div
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(circle at 50% 25%, rgba(255,255,255,0.45) 0%, rgba(250,247,242,0.15) 50%, rgba(250,247,242,0.3) 100%)",
+                "radial-gradient(circle at 50% 30%, rgba(255,255,255,0.48) 0%, rgba(250,247,242,0.2) 50%, rgba(250,247,242,0.35) 100%)",
             }}
           />
         </div>
 
-        {/* 確実にフェードインして浮かび上がる和紙風カード */}
+        {/* 和紙風カード（ゆったりとした余白と上質なタイポグラフィ） */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 w-full max-w-xl sm:max-w-2xl bg-[#FAF7F2]/95 backdrop-blur-md rounded-3xl p-6 sm:p-9 md:p-10 shadow-xl border border-[#E6DEC8] my-auto"
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 w-full max-w-2xl sm:max-w-3xl bg-[#FAF7F2]/95 backdrop-blur-md rounded-3xl p-7 sm:p-11 md:p-14 shadow-xl border border-[#E6DEC8] my-auto"
         >
-          {/* カード上部のStory & Philosophyバッジ（カードと一体化して見切れを防止） */}
-          <div className="flex items-center justify-center mb-4 sm:mb-5">
-            <span className="font-caveat text-xl sm:text-2xl text-acorn-700 -rotate-2 inline-block bg-honey-200/50 px-4 py-0.5 rounded-full border border-honey-300/60 shadow-2xs">
-              ~ Story & Philosophy ~
+          {/* バッジ */}
+          <div className="flex items-center justify-center gap-2 mb-6 sm:mb-8">
+            <ForestIcon name="pine-mouse" size={24} color="#6B4423" />
+            <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-1 inline-block bg-honey-200/50 px-5 py-0.5 rounded-full border border-honey-300/60 shadow-2xs">
+              ~ Concept ~
             </span>
+            <ForestIcon name="acorn" size={20} color="#6B4423" />
           </div>
 
-          {/* カード内のコンテンツ */}
-          <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-5 md:gap-8">
-            {/* 縦書きの添え字（PC表示） */}
-            <div className="shrink-0 hidden md:block pt-1">
-              <div className="vertical-text font-klee text-sm font-semibold tracking-[0.3em] text-acorn-700/85 py-2 border-r-2 border-dashed border-acorn-300/60 pr-3 min-h-[190px]">
-                北軽井沢の風と、川越の街角から。
-              </div>
-            </div>
+          <div className="flex flex-col items-center text-center">
+            {/* メイン見出し */}
+            <h2
+              id="concept-title"
+              className="font-shippori text-xl sm:text-2xl md:text-3xl font-medium leading-[1.65] text-acorn-900 tracking-wide max-w-xl mx-auto"
+            >
+              ひとつとして同じ形のない、
+              <br className="hidden sm:inline" />
+              自然の造形をそのまま活かすこと。
+            </h2>
 
-            {/* メイン見出し＆本文 */}
-            <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1">
-              {/* スマホ用横書き添え字 */}
-              <div className="md:hidden font-klee text-xs sm:text-sm font-semibold tracking-[0.2em] text-acorn-700/85 pb-1 mb-2.5 border-b border-dashed border-acorn-300/60">
-                北軽井沢の風と、川越の街角から。
-              </div>
+            <ChalkWavyLine className="w-32 sm:w-40 h-3 text-acorn-400 mt-4 mb-6 sm:mb-8" />
 
-              {/* 北欧の家イラスト */}
-              <div className="mb-1.5">
-                <NordicHouseIllust className="w-12 sm:w-14 h-auto drop-shadow-xs" />
-              </div>
-
-              {/* 見出し（途中で折り返さない2行表示） */}
-              <h2
-                id="concept-title"
-                className="font-klee text-[18px] sm:text-2xl md:text-[1.65rem] font-semibold leading-[1.45] text-acorn-900 tracking-wide"
-              >
-                <span className="block whitespace-nowrap">自然の恵みを大切に、</span>
-                <span className="block whitespace-nowrap">ひとつずつ、心のままに。</span>
-              </h2>
-              <ChalkWavyLine className="w-24 sm:w-28 h-3 text-acorn-400 mt-1.5" />
-
-              {/* 本文 */}
-              <div className="mt-4 space-y-3 sm:space-y-3.5 text-xs sm:text-sm md:text-[15px] leading-[2.0] text-acorn-800/90 font-sans">
-                <p>
-                  のどかな北軽井沢と、歴史ある川越。
-                  <br />
-                  ふたつの街を行き来しながら、
-                  <br />
-                  森で出会った木の実や小枝を使って
-                  <br />
-                  ちいさな作品をつくっています。
-                </p>
-                <p>
-                  始まりは、ただ「自然のものが好き」という
-                  <br />
-                  純粋な気持ちからでした。
-                  <br />
-                  誰に教わるでもなく、自分の手で
-                  <br />
-                  少しずつ形にしていく時間は、
-                  <br />
-                  私にとって何よりの楽しみです。
-                </p>
-                <p className="pt-0.5">
-                  手にとってくださった方の心がふっと癒され、
-                  <br />
-                  ちいさな「倖せ」をお届けできたなら。
-                  <br />
-                  <span className="font-klee text-sm sm:text-base text-acorn-900 font-semibold block mt-1">
-                    どうぞ、お気に入りを見つけにいらしてください。
-                  </span>
-                </p>
-              </div>
+            {/* 本文 */}
+            <div className="space-y-4 text-sm sm:text-base md:text-[17px] leading-[2.1] text-acorn-800/90 font-sans max-w-xl mx-auto text-left sm:text-center">
+              <p>
+                松ぼっくりのうろこを一枚ずつ重ねてつくる小さな屋根や、ころんとした木の実から生まれる森の動物たち。
+              </p>
+              <p>
+                ふと目をやったときに、森の澄んだ空気や木漏れ日のあたたかさを思い出してもらえるように。
+              </p>
+              <p className="font-klee text-base sm:text-lg text-acorn-900 font-semibold pt-1">
+                季節の移ろいとともに、心を込めてお届けしています。
+              </p>
             </div>
           </div>
         </motion.div>
@@ -202,9 +167,8 @@ export function Concept() {
 
       {/* ============================================================
           Part 2: 「大切にしている3つのこと（01〜03）」
-          スクロールすると確実に順次フェードインする安定したリッチカードレイアウト
           ============================================================ */}
-      <div className="relative py-16 sm:py-24 px-4 sm:px-6 max-w-4xl mx-auto">
+      <div className="relative py-16 sm:py-24 px-4 sm:px-6 max-w-4xl mx-auto z-10">
         {/* セクション見出し */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -213,9 +177,12 @@ export function Concept() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12 sm:mb-16"
         >
-          <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-1 inline-block">
-            Our Commitment
-          </span>
+          <div className="inline-flex items-center gap-2 mb-1">
+            <ForestIcon name="tree" size={22} color="#6B4423" />
+            <span className="font-caveat text-2xl sm:text-3xl text-acorn-700 -rotate-1">
+              Our Commitment
+            </span>
+          </div>
           <h3 className="font-klee text-2xl sm:text-3xl lg:text-4xl font-semibold text-acorn-900 mt-1">
             大切にしている 3つのこと
           </h3>
@@ -224,7 +191,7 @@ export function Concept() {
           </div>
         </motion.div>
 
-        {/* 3つのカード一覧（スクロールに合わせて確実に1枚ずつフェードイン出現） */}
+        {/* 3つのカード一覧 */}
         <div className="space-y-16 sm:space-y-24">
           {COMMITMENTS.map((item, index) => (
             <motion.div
@@ -260,8 +227,8 @@ export function Concept() {
                       ~ {item.enTitle} ~
                     </span>
                   </div>
-                  <div className="shrink-0 drop-shadow-xs">
-                    {item.illust}
+                  <div className="shrink-0 p-1.5 rounded-full bg-honey-200/30 border border-honey-300/40">
+                    <ForestIcon name={item.iconName} size={28} color="#6B4423" />
                   </div>
                 </div>
 
@@ -280,3 +247,5 @@ export function Concept() {
     </section>
   );
 }
+
+export default Concept;

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { compressReviewPhoto } from "@/lib/compress-image";
+import { ForestIcon } from "@/components/ui/ForestIcon";
 import type { Review } from "@/types";
 
 type ReviewFormValues = {
@@ -227,9 +228,10 @@ export function ReviewForm({ onPosted }: ReviewFormProps) {
               type="button"
               onClick={openCamera}
               disabled={compressing}
-              className="inline-flex min-h-11 items-center rounded-full bg-cream-100 px-5 font-sans text-sm font-bold text-acorn-800 transition hover:bg-cream-200 disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acorn-500 border border-acorn-200/60"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-cream-100 px-5 font-sans text-sm font-bold text-acorn-800 transition hover:bg-cream-200 disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acorn-500 border border-acorn-200/60"
             >
-              {compressing ? "写真を準備中…" : "写真を撮る／選ぶ"}
+              <ForestIcon name="camera" size={18} color="#6B4423" />
+              <span>{compressing ? "写真を準備中…" : "写真を撮る／選ぶ"}</span>
             </button>
             {previewUrl ? (
               <button
